@@ -42,18 +42,18 @@ public class Main {
 		Collection<String> elems = Arrays.asList("f10", "f15", "f2", "f4", "f4");
 		Comparator<String> compare = (s1, s2) -> {
 			String[] tokens1 = s1.split("\\D+");
-	        String[] tokens2 = s2.split("\\D+");
-	        int i = 0;
-	        while (i < tokens1.length && i < tokens2.length) {
-	            if (tokens1[i].length() != tokens2[i].length()) {
-	                return tokens1[i].length() - tokens2[i].length();
-	            }
-	            if (!tokens1[i].equals(tokens2[i])) {
-	                return tokens1[i].compareTo(tokens2[i]);
-	            }
-	            i++;
-	        }
-	        return tokens1.length - tokens2.length;
+			String[] tokens2 = s2.split("\\D+");
+			int i = 0;
+			while (i < tokens1.length && i < tokens2.length) {
+				if (tokens1[i].length() != tokens2[i].length()) {
+					return tokens1[i].length() - tokens2[i].length();
+				}
+				if (!tokens1[i].equals(tokens2[i])) {
+					return tokens1[i].compareTo(tokens2[i]);
+				}
+				i++;
+			}
+			return tokens1.length - tokens2.length;
 		};
 		String[] orderedElems = 
 		elems.stream().sorted(compare).toArray(String[]::new);
