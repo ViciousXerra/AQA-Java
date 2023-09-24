@@ -30,7 +30,7 @@ public class Box<T extends Fruit> {
 		return this.getWeight() == anotherBox.getWeight();
 	}
 	
-	public void putAll(Box<? extends T> box) {
+	public void putAll(Box<T> box) {
 		container.addAll(box.container);
 		box.container.clear();
 	}
