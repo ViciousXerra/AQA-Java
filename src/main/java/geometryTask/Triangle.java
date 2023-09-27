@@ -2,7 +2,7 @@ package main.java.geometryTask;
 
 public class Triangle extends Figure {
 
-	private double side1, side2, side3;
+	protected double side1, side2, side3;
 	
 	public Triangle(double side1, double side2, double side3, Color bodyColor, Color borderColor) {
 		super(bodyColor, borderColor);

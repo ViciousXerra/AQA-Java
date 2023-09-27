@@ -67,17 +67,11 @@ public class Main {
 		System.out.println(rect);
 		System.out.println(triangle);
 		
-		//--------------------------------------
+		GeometricCalculator calc = new GeometricCalculator();
 		
-		System.out.printf("Circle perimeter: %.10f\nCircle area: %.10f\n\n", 
-				GeometryUtil.calcPerimeter(circle.getSides()), 
-				GeometryUtil.calcArea(circle.getSides()));
-		System.out.printf("Rectangle perimeter: %.10f\nRectangle area: %.10f\n\n", 
-				GeometryUtil.calcPerimeter(rect.getSides()), 
-				GeometryUtil.calcArea(rect.getSides()));
-		System.out.printf("Triangle perimeter: %.10f\nTriangle area: %.10f\n\n", 
-				GeometryUtil.calcPerimeter(triangle.getSides()), 
-				GeometryUtil.calcArea(triangle.getSides()));
+		System.out.printf("Circle perimeter: %.2f;\nCircle area: %.2f;\n", calc.calcPerimeter(circle), calc.calcArea(circle));
+		System.out.printf("Rectangle perimeter: %.2f;\nRectangle area: %.2f;\n", calc.calcPerimeter(rect), calc.calcArea(rect));
+		System.out.printf("Triangle perimeter: %.2f;\ntriangle area: %.2f;\n", calc.calcPerimeter(triangle), calc.calcArea(triangle));
 		
 	}
 

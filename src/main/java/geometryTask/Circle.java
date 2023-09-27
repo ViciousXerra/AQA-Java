@@ -2,7 +2,7 @@ package main.java.geometryTask;
 
 public class Circle extends Figure {
 
-	private double radius;
+	protected double radius;
 	
 	public Circle(double radius, Color bodyColor, Color borderColor) {
 		super(bodyColor, borderColor);

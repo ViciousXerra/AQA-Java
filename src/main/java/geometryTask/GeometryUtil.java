@@ -1,34 +1,29 @@
 package main.java.geometryTask;
 
 public interface GeometryUtil {
-	/*
-	 * Если честно, не понял последний пункт. Если прописывать дефолтные методы, то будет три интерфейса на каждую из фигур.
-	 * Но можно написать в одном интерфейсе статический метод, ни про какое API, конечно же, тут речи и не идёт.
-	 */
-	static double calcPerimeter(double... sides) {
-		switch(sides.length) {
-			case 1:
-				return 2 * Math.PI * sides[0];
-			case 2:
-				return sides[0]*2 + sides[1]*2;
-			case 3:
-				return sides[0] + sides[1] + sides[2];
-			default:
-				throw new UnsupportedOperationException();
-		}
+	
+	default double calcPerimeter(Circle c) {
+		return 2 * Math.PI * c.radius;
 	}
 	
-	static double calcArea(double... sides) {
-		switch(sides.length) {
-			case 1:
-				return Math.PI * Math.pow(sides[0], 2);
-			case 2:
-				return sides[0]*sides[1];
-			case 3:
-				double semiPerimeter = (sides[0] + sides[1] + sides[2]) / 2;
-				return Math.sqrt(semiPerimeter * (semiPerimeter - sides[0]) * (semiPerimeter - sides[1]) * (semiPerimeter - sides[2]));
-			default:
-				throw new UnsupportedOperationException();
-		}
+	default double calcPerimeter(Rectangle r) {
+		return r.height*2 + r.width*2;
+	}
+	
+	default double calcPerimeter(Triangle t) {
+		return t.side1 + t.side2 + t.side3;
+	}
+	
+	default double calcArea(Circle c) {
+		return Math.PI * Math.pow(c.radius, 2);
+	}
+	
+	default double calcArea(Rectangle r) {
+		return r.height*r.width;
+	}
+	
+	default double calcArea(Triangle t) {
+		double semiPerimeter = (t.side1 + t.side2 + t.side3) / 2;
+		return Math.sqrt(semiPerimeter * (semiPerimeter - t.side1) * (semiPerimeter - t.side2) * (semiPerimeter - t.side3));
 	}
 }

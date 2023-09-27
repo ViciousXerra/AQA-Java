@@ -2,7 +2,7 @@ package main.java.geometryTask;
 
 public class Rectangle extends Figure {
 
-	private double width, height;
+	protected double width, height;
 	
 	public Rectangle(double width, double height, Color bodyColor, Color borderColor) {
 		super(bodyColor, borderColor);
