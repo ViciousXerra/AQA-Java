@@ -71,7 +71,7 @@ public class Main {
 		
 		System.out.printf("Circle perimeter: %.2f;\nCircle area: %.2f;\n", calc.calcPerimeter(circle), calc.calcArea(circle));
 		System.out.printf("Rectangle perimeter: %.2f;\nRectangle area: %.2f;\n", calc.calcPerimeter(rect), calc.calcArea(rect));
-		System.out.printf("Triangle perimeter: %.2f;\ntriangle area: %.2f;\n", calc.calcPerimeter(triangle), calc.calcArea(triangle));
+		System.out.printf("Triangle perimeter: %.2f;\nTriangle area: %.2f;\n", calc.calcPerimeter(triangle), calc.calcArea(triangle));
 		
 	}
 
