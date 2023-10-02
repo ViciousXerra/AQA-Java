@@ -24,8 +24,7 @@ class Phonebook {
 		Set<String> set = map.getOrDefault(secondName, new LinkedHashSet<>());
 		for(String tel : set) {
 			sb
-			.append(tel)
-			.append("\n");
+			.append(String.format("%s %s\n", secondName, tel));
 		}
 		return sb.toString();
 	}
