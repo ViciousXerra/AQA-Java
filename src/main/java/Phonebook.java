@@ -1,31 +1,30 @@
 package main.java;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 class Phonebook {
-	private Map<String, Set<String>> map;
+	private List<Person> list;
 	
 	{
-		map = new HashMap<>();
+		list = new ArrayList<>();
 	}
 	
 	protected void add(String secondName, String tel) {
-		Set<String> set = map.getOrDefault(secondName, new LinkedHashSet<>());
-		set.add(tel);
-		if(set.size() == 1)
-			map.put(secondName, set);
+		list.add(new Person(secondName, tel));
 	}
 	
 	protected String get(String secondName) {
 		StringBuilder sb = new StringBuilder();
-		Set<String> set = map.getOrDefault(secondName, new LinkedHashSet<>());
-		for(String tel : set) {
-			sb
-			.append(String.format("%s %s\n", secondName, tel));
-		}
+		list
+		.stream()
+		.filter(p -> p.getSecondName().equals(secondName))
+		.forEach(p -> {
+			sb.append(secondName);
+			sb.append(": ");
+			sb.append(p.getTel());
+			sb.append("\n");
+		});
 		return sb.toString();
 	}
 	
