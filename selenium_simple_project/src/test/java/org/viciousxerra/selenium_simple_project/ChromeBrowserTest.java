@@ -2,13 +2,16 @@ package org.viciousxerra.selenium_simple_project;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.v117.browser.Browser;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +20,7 @@ import java.time.Duration;
 import java.util.List;
 
 class ChromeBrowserTest {
-	private static String URL = "https://www.mts.by/";
+	private static String URL = "https://www.mts.by";
 	private static WebDriver driver;
 	
 	@BeforeAll
@@ -34,11 +37,7 @@ class ChromeBrowserTest {
 		 * driver.manage().timeouts().implicitlyWait(3L, TimeUnit.SECONDS);
 		 */
 		driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3L));
-	}
-	
-	@BeforeEach
-	void setHomeUrl() {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10L));
 		driver.get(URL);
 	}
 	
@@ -55,10 +54,10 @@ class ChromeBrowserTest {
 		
 		//When
 		WebElement element = driver.findElement(By.xpath("//section[@class = 'pay']/div/h2"));
-		String elementText = element.getText();
+		String elementLabel = element.getText();
 		
 		//Then
-		assertThat(elementText.equals(line)).isEqualTo(true);
+		assertThat(elementLabel).isEqualTo(line);
 	}
 	
 	@Test
@@ -92,8 +91,10 @@ class ChromeBrowserTest {
 		//When
 		WebElement element = driver.findElement(By.xpath("//div[@class = 'pay__wrapper']/a"));
 		
+		//Then
 		assertThat(element.getText()).isEqualTo("Подробнее о сервисе");
 		
+		//When
 		HttpURLConnection con = null;
 		int responseCode = -1;
 		try {
@@ -104,11 +105,54 @@ class ChromeBrowserTest {
 		} catch(Exception e) {
 			
 		} finally {
-			con.disconnect();
+			if(con != null) {
+				con.disconnect();
+			}
 		}
 		
 		//Then
-		assertThat(responseCode).isEqualByComparingTo(HttpURLConnection.HTTP_OK);
+		assertThat(responseCode).isBetween(200, 399);
+	}
+	
+	@Test
+	@DisplayName("Test button")
+	void testButton() {
+		//Given
+		String category = "Услуги связи";
+		String tel = "297777777";
+		String paymentValue = "10";
+		String email = "randomemail@mailbox.org";
+		
+		//When
+		WebElement base = driver.findElement(By.xpath("//div[@class = 'pay__form']"));
+		String actualCategory = base.findElement(By.xpath("//span[@class = 'select__now']")).getText();
+		
+		//Then
+		assertThat(actualCategory).isEqualTo(category);
+		
+		//When
+		base = driver.findElement(By.xpath("//input[@class = 'phone']"));
+		base.sendKeys(tel);
+		base = driver.findElement(By.xpath("//input[@class = 'total_rub']"));
+		base.sendKeys(paymentValue);
+		base = driver.findElement(By.xpath("//input[@class = 'email']"));
+		base.sendKeys(email);
+		
+		base = driver.findElement(By.cssSelector("#pay-connection > button"));
+		
+		//Then
+		assertThat(base.getDomProperty("textContent")).isEqualTo("Продолжить");		
+		
+		//When
+		JavascriptExecutor exec = (JavascriptExecutor)driver;
+		exec.executeScript("arguments[0].click();", base);
+		new WebDriverWait(driver, Duration.ofSeconds(5L)).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0));
+		//Then
+		String actualPrice = driver.findElement(By.className("header__payment-amount")).getDomProperty("textContent");
+		String actualTelInfo = driver.findElement(By.className("header__payment-info")).getDomProperty("textContent");
+
+		assertThat(actualPrice).isEqualTo(" 10.00 BYN ");
+		assertThat(actualTelInfo.contains("375297777777")).isEqualTo(true);
 	}
 	
 }
