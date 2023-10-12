@@ -79,8 +79,8 @@ class ChromeBrowserTest {
 	
 	@Test
 	@Order(2)
-	@DisplayName("Check phone payment form")
-	void testForm() {
+	@DisplayName("Check phone payment form payment value and tel")
+	void testFormPaymentValueAndTel() {
 		//Given
 		String tel = "297777777";
 		String paymentValue = "10";
@@ -114,25 +114,45 @@ class ChromeBrowserTest {
 		//Then
 		assertThat(actualPrice.contains("10.00 BYN")).isEqualTo(true);
 		assertThat(actualPriceButton.contains("10.00 BYN")).isEqualTo(true);
-		assertThat(actualTelInfo.contains("375297777777")).isEqualTo(true);
+		assertThat(actualTelInfo.contains("375297777777")).isEqualTo(true);		
+	}
+	
+	@Test
+	@Order(3)
+	@DisplayName("Check phone payment form logotypes")
+	void testLogo() {
+		//Given
+		boolean isPresent = true;
 		
 		//When
-		boolean isPresent = true;
 		List<WebElement> logoList = driver.findElements(
-				By.cssSelector("body > app-root > div > div > app-payment-container > section > app-card-page > "
-						+ "div > div.card-page__card > app-card-input > form > div.card.ng-tns-c52-0 > "
-						+ "div:nth-child(1) > app-input > div > div > div.icons-container.ng-tns-c46-1 > div > div > img"));
-		assertThat(logoList.size()).isPositive();
+			By.cssSelector("body > app-root > div > div > app-payment-container > section > app-card-page > "
+				+ "div > div.card-page__card > app-card-input > form > div.card.ng-tns-c52-0 > "
+				+ "div:nth-child(1) > app-input > div > div > div.icons-container.ng-tns-c46-1 > div > div > img"));
 		
+		//Then
+		assertThat(logoList.size()).isPositive();
+				
 		for(WebElement x : logoList) {
 			if(!x.isDisplayed()) {
 				isPresent = false;
 				break;
 			}
 		}
-		
+				
 		//Then
 		assertThat(isPresent).isEqualTo(true);
+	}
+	
+	@Test
+	@Order(4)
+	@DisplayName("Check phone payment form text")
+	void testFormText() {
+		//Given
+		String cardNum = "Номер карты";
+		String validDate = "Срок действия";
+		String CVC = "CVC";
+		String name = "Имя держателя (как на карте)";
 		
 		//When
 		String actualCardNumSign = driver.findElement(By.xpath("//app-input/div/div/div[1]/label"))
@@ -143,13 +163,12 @@ class ChromeBrowserTest {
 				.getDomProperty("textContent");
 		String userFirstAndLastName = driver.findElement(By.xpath("//app-card-input/form/div[1]/div[3]/app-input/div/div/div[1]/label"))
 				.getDomProperty("textContent");
-		
+				
 		//Then
-		assertThat(actualCardNumSign).isEqualTo("Номер карты");
-		assertThat(actualValidDate).isEqualTo("Срок действия");
-		assertThat(CVCSign).isEqualTo("CVC");
-		assertThat(userFirstAndLastName).isEqualTo("Имя держателя (как на карте)");
-		
+		assertThat(actualCardNumSign).isEqualTo(cardNum);
+		assertThat(actualValidDate).isEqualTo(validDate);
+		assertThat(CVCSign).isEqualTo(CVC);
+		assertThat(userFirstAndLastName).isEqualTo(name);
 	}
 		
 }
