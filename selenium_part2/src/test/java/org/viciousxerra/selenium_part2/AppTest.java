@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -62,8 +63,10 @@ class ChromeBrowserTest {
 		//When
 		Actions action = new Actions(driver);
 		action
+		.scrollToElement(driver.findElement(By.xpath("//button[@class = 'select__header']")))
 		.click(driver.findElement(By.xpath("//button[@class = 'select__header']")))
 		.pause(Duration.ofSeconds(5L))
+		.scrollToElement(driver.findElement(By.xpath(String.format("//ul[@class = 'select__list']/li[%d]", type))))
 		.click(driver.findElement(By.xpath(String.format("//ul[@class = 'select__list']/li[%d]", type))))
 		.build()
 		.perform();
