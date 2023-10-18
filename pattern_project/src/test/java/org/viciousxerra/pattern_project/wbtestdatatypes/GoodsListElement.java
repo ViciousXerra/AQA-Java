@@ -9,13 +9,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class GoodsListElement {
 
-	private final static String ELEMENT_CLASS_NAME = "goods__list";
-	private final static String ARTICLE_XPATH = "//article";
+	private final static String ELEMENT_XPATH = "//div[@class = 'main-page']/div[3]/div[2]/div";
+	private final static String GOODS_CLASSNAME = "product-card__wrapper";
 	
 	private WebDriver driver;
 	private WebElement goodsList;
@@ -24,8 +25,13 @@ public class GoodsListElement {
 	
 	private GoodsListElement(WebDriver driver) {
 		this.driver = driver;
-		goodsList = this.driver.findElement(By.className(ELEMENT_CLASS_NAME));
-		((JavascriptExecutor)this.driver).executeScript("arguments[0].scrollIntoView(true);", goodsList);
+		goodsList = this.driver.findElement(By.xpath(ELEMENT_XPATH));
+		new Actions(driver)
+		.moveToElement(goodsList)
+		.build()
+		.perform();
+		new WebDriverWait(driver, Duration.ofSeconds(10L)).until(ExpectedConditions.visibilityOfNestedElementsLocatedBy(By.xpath(ELEMENT_XPATH), By.className(GOODS_CLASSNAME)));
+		
 	}
 	
 	static GoodsListElement getGoodsListElement(WebDriver driver) {
@@ -50,7 +56,7 @@ public class GoodsListElement {
 	private List<GoodsArticle> getArticles() {
 		List<GoodsArticle> list = 
 				goodsList
-				.findElements(By.xpath(ARTICLE_XPATH))
+				.findElements(By.className(GOODS_CLASSNAME))
 				.stream()
 				.map(e -> {
 					return new GoodsArticle(driver, e);

@@ -4,10 +4,11 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
 	
-	private final static String HOME_PAGE_URL = "https://www.wildberries.ru/";
+	private final static String HOME_PAGE_URL = "https://www.wildberries.ru";
 	
 	private WebDriver driver;
 	
@@ -16,6 +17,7 @@ public class HomePage {
 	private HomePage() {
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
+		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10L));
 		driver.get(HOME_PAGE_URL);
 	}
