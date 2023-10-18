@@ -7,16 +7,16 @@ import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class GoodsListElement {
 
-	private final static String ELEMENT_XPATH = "//div[@class = 'main-page']/div[3]/div[2]/div";
-	private final static String GOODS_CLASSNAME = "product-card__wrapper";
+	private final static String ELEMENT_XPATH = "//*[@id= 'app']/div[2]/div/div[3]/div[2]/div[1]";
+	private final static String ARTICLE_XPATH = "/article";
 	
 	private WebDriver driver;
 	private WebElement goodsList;
@@ -26,11 +26,14 @@ public class GoodsListElement {
 	private GoodsListElement(WebDriver driver) {
 		this.driver = driver;
 		goodsList = this.driver.findElement(By.xpath(ELEMENT_XPATH));
-		new Actions(driver)
-		.moveToElement(goodsList)
-		.build()
-		.perform();
-		new WebDriverWait(driver, Duration.ofSeconds(10L)).until(ExpectedConditions.visibilityOfNestedElementsLocatedBy(By.xpath(ELEMENT_XPATH), By.className(GOODS_CLASSNAME)));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", goodsList);
+		new WebDriverWait(driver, Duration.ofSeconds(10L))
+		.ignoring(StaleElementReferenceException.class)
+		.until((d) -> {
+			WebElement element = d.findElement(By.xpath(ELEMENT_XPATH));
+			element.findElements(By.xpath(ARTICLE_XPATH));
+			return true;
+		});
 		
 	}
 	
@@ -55,8 +58,8 @@ public class GoodsListElement {
 	
 	private List<GoodsArticle> getArticles() {
 		List<GoodsArticle> list = 
-				goodsList
-				.findElements(By.className(GOODS_CLASSNAME))
+				driver
+				.findElements(By.xpath(ELEMENT_XPATH + ARTICLE_XPATH))
 				.stream()
 				.map(e -> {
 					return new GoodsArticle(driver, e);
